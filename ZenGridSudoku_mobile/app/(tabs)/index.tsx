@@ -1,6 +1,5 @@
 // Import the required components and hooks
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 // Import your screen components
@@ -12,7 +11,6 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -37,6 +35,5 @@ export default function App() {
 
         {/* ... other tabs */}
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }
