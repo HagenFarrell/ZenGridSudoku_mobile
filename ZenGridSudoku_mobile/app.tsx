@@ -1,11 +1,11 @@
 // Import the required components and hooks
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import Icon from '@expo/vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 // Import your screen components
-import LoginScreen from './app/Screens/LoginScreen';
-import SignupScreen from './app/Screens/SignupScreen';
+import LoginScreen from '@/app/Screens/LoginScreen';
+import SignupScreen from '@/app/Screens/SignupScreen';
 // ... import other screens
 
 const Tab = createBottomTabNavigator();
@@ -17,8 +17,7 @@ export default function App() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-
-            // Change icon name based on the route.name
+        
             if (route.name === 'Login') {
               iconName = focused ? 'log-in' : 'log-in-outline';
             } else if (route.name === 'Signup') {
@@ -26,8 +25,8 @@ export default function App() {
             } else if (route.name === 'Play') {
               iconName = focused ? 'play-circle' : 'play-circle-outline';
             }
-            // You can return any component that you like here!
-            return <Icon name={iconName} size={size} color={color} />;
+        
+            return <Ionicons name={iconName as any} size={size} color={color} />;
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
