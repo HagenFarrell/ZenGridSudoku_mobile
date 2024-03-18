@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
+import axios, { AxiosError } from "axios";
 
 const LoginScreen = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLoginPress = () => {
-    // Here, you would typically handle the login logic,
-    // such as calling an API with the username and password.
-    console.log('Login Pressed', { username, password });
-    // For demonstration, just logging the credentials.
+  const handleLoginPress = async () => {
+    try {
+      const response = await axios.post(
+        "http://sudokuapp-f0e20225784a.herokuapp.com/api/login",
+        {
+          username: username,
+          password: password,
+        }
+      );
+
+      console.log("Login successful:", response.data);
+      Alert.alert("Login Success", "You have logged in successfully!");
+      // Navigate or update state as needed here
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        // Assuming the response.data is an object with a message property
+        const message = (axiosError.response.data as { message: string })
+          .message;
+        Alert.alert("Login Failed", message || "An unexpected error occurred");
+      }
+      // Handle other error cases
+    }
   };
 
   return (
@@ -26,7 +45,7 @@ const LoginScreen = () => {
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry // Hides the password input
+        secureTextEntry
       />
       <Button title="Login" onPress={handleLoginPress} />
     </View>
@@ -36,19 +55,19 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
