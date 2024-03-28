@@ -33,6 +33,7 @@ import HomeScreen from '@/app/Screens/HomeScreen';
 import SettingsScreen from '@/app/Screens/SettingsScreen';
 import ProfileScreen from '@/app/Screens/ProfileScreen';
 import HomeScreenStack from './HomeScreenStack';
+import { Link } from 'expo-router';
 
 const BottomBar = createBottomTabNavigator();
 

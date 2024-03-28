@@ -6,6 +6,7 @@
 */
 
 import { View, Text, StyleSheet } from 'react-native';
+import { values } from '@/constants/CellConstants';
 
 interface GridCellProps {
   highlight?: string;
@@ -26,9 +27,9 @@ const GridCell: React.FC<GridCellProps> = ({ value, locked }) => {
 // Can these become properties from the interface?
 const styles = StyleSheet.create({
   container: {
-    width: 40,
-    height: 40,
-    borderWidth: 1,
+    width: values.cellSize,
+    height: values.cellSize,
+    borderWidth: values.innerWidth,
     borderColor: 'gray',
     alignItems: 'center',
     justifyContent: 'center'
