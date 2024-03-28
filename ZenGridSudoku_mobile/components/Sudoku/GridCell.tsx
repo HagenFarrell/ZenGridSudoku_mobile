@@ -8,6 +8,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 
 interface GridCellProps {
+  highlight?: string;
   value?: number;         // integer clamped between 1 and 9
   locked?: boolean;       // puzzle hints are locked
 }
