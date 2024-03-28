@@ -57,7 +57,8 @@ const LoginScreen = ({ navigation }: any) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLoginPress} />
-      <Button title="Tempback" onPress={() => navigation.goBack("HomeScreen")}></Button>
+      <Button title="Register" onPress={() => navigation.navigate("RegisterScreen")}></Button>
+      <Button title="Tempback" onPress={() => navigation.goBack()}></Button>
     </View>
   );
 }
