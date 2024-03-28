@@ -1,0 +1,10 @@
+
+This entire package shouldn't be used in production or anywhere else
+in the codebase.
+
+Do not import this package or anything within it.
+
+These are older files with implementation to be possibly copied over
+and merged in with existing implemented files.
+
+At minimum an archive from any refactors of previous code.
