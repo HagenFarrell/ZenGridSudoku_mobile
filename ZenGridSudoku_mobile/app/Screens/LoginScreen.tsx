@@ -11,7 +11,7 @@ import { View, Text, Button, Alert, StyleSheet, TextInput } from 'react-native';
 
 // Currently trying to figure out the proper type
 const LoginScreen = ({ navigation }: any) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLoginPress = async () => {
@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }: any) => {
       const response = await axios.post(
         "http://sudokuapp-f0e20225784a.herokuapp.com/api/login",
         {
-          username: username,
+          email: email,
           password: password,
         }
       );
@@ -45,9 +45,9 @@ const LoginScreen = ({ navigation }: any) => {
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="email"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
