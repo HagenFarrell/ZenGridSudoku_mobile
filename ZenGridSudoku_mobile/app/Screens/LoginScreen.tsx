@@ -1,13 +1,13 @@
+/*
+ *
+ *
+ *
+ */
 
-/* 
- * 
- * 
- * 
-*/
-
-import axios, { AxiosError } from 'axios';
-import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet, TextInput } from 'react-native';
+import axios, { AxiosError } from "axios";
+import React, { useState } from "react";
+import { View, Text, Button, Alert, StyleSheet, TextInput } from "react-native";
+import * as SecureStore from 'expo-secure-store';
 
 // Currently trying to figure out the proper type
 const LoginScreen = ({ navigation }: any) => {
@@ -26,6 +26,10 @@ const LoginScreen = ({ navigation }: any) => {
 
       console.log("Login successful:", response.data);
       Alert.alert("Login Success", "You have logged in successfully!");
+
+      // Store token upon successful login.
+      await SecureStore.setItemAsync('userToken', response.data.token);
+      
       navigation.goBack();
       // Navigate or update state as needed here
     } catch (error) {
@@ -57,11 +61,14 @@ const LoginScreen = ({ navigation }: any) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLoginPress} />
-      <Button title="Register" onPress={() => navigation.navigate("RegisterScreen")}></Button>
+      <Button
+        title="Register"
+        onPress={() => navigation.navigate("RegisterScreen")}
+      ></Button>
       <Button title="Tempback" onPress={() => navigation.goBack()}></Button>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
