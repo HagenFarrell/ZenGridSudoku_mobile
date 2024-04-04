@@ -42,6 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUserInfo({ id: userData.id, username: userData.username });
     // Store the user data in SecureStore as well
     SecureStore.setItemAsync("userInfo", JSON.stringify(userData));
+    console.log("Stored user info in SecureStore");
   };
 
   return (

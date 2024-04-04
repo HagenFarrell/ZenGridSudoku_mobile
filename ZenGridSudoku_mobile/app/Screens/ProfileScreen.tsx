@@ -1,18 +1,31 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useAuth } from "@/app/Navigation/AuthContext";
+import * as SecureStore from "expo-secure-store";
 
-const ProfileScreen: React.FC = () => {
-  const { userInfo } = useAuth();
+const ProfileScreen = () => {
+  const [userInfo, setUserInfo] = useState({ id: "", username: "" });
 
-  if (!userInfo) {
-    return <Text>Please login to view profile information.</Text>;
-  }
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userId = await SecureStore.getItemAsync("userId");
+      const username = await SecureStore.getItemAsync("username");
+
+      if (userId && username) {
+        setUserInfo({ id: userId, username: username });
+      } else {
+        console.log("User not logged in or information not stored.");
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <Text style={styles.info}>Username: {userInfo.username}</Text>
+      <Text style={styles.title}>User Profile</Text>
+      {userInfo.username && (
+        <Text style={styles.info}>Hello, {userInfo.username}</Text>
+      )}
     </View>
   );
 };
@@ -22,13 +35,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
+    marginBottom: 20,
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
   },
 });
 

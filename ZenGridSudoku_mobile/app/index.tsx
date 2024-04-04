@@ -5,10 +5,11 @@
  * source, with the HomeScreen as the initial screen
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import PrimaryNavigationBar from "@/app/Navigation/PrimaryNavigationBar";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "@/app/Navigation/AuthContext";
+import * as SecureStore from "expo-secure-store";
 
 /* Testing the behavior of independent={true}
  *
@@ -16,7 +17,21 @@ import { AuthProvider } from "@/app/Navigation/AuthContext";
  *
  */
 
+const clearSecureStore = async () => {
+  try {
+    await SecureStore.deleteItemAsync("userId");
+    await SecureStore.deleteItemAsync("username");
+    console.log("SecureStore cleared on app bootup.");
+  } catch (error) {
+    console.error("Error clearing SecureStore:", error);
+  }
+};
+
 const App = () => {
+  useEffect(() => {
+    clearSecureStore();
+  }, []);
+
   return (
     <AuthProvider>
       <NavigationContainer independent={true}>
