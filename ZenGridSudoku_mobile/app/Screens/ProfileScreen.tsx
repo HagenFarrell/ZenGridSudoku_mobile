@@ -1,50 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useAuth } from "../Navigation/AuthContext"; 
 
 const ProfileScreen = () => {
-  const [userInfo, setUserInfo] = useState({ id: "", username: "" });
+  const [userInfo, setUserInfo] = useState({
+    userId: "",
+    username: "",
+  });
+
+  const { userId, username } = useAuth(); // Destructure the needed user information
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const userId = await SecureStore.getItemAsync("userId");
-      const username = await SecureStore.getItemAsync("username");
+      // Retrieve the values from SecureStore and parse them
+      const storedUserId = await SecureStore.getItemAsync("userId");
+      const storedUsername = await SecureStore.getItemAsync("username");
 
-      if (userId && username) {
-        setUserInfo({ id: userId, username: username });
-      } else {
-        console.log("User not logged in or information not stored.");
+      if (storedUserId && storedUsername) {
+        setUserInfo({
+          userId: storedUserId,
+          username: storedUsername,
+        });
       }
     };
 
     fetchUserInfo();
-  }, []);
+  }, [userId, username]);
+
+  // Debugging: Log the retrieved user information
+  useEffect(() => {
+    console.log(
+      "Profile Screen - UserId:",
+      userInfo.userId,
+      "Username:",
+      userInfo.username
+    );
+  }, [userInfo]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>User Profile</Text>
-      {userInfo.username && (
-        <Text style={styles.info}>Hello, {userInfo.username}</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      {userInfo.userId ? (
+        <>
+          <Text>Welcome, {userInfo.username}</Text>
+          <Text>Your User ID: {userInfo.userId}</Text>
+        </>
+      ) : (
+        <Text>Please login to view information</Text>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  info: {
-    fontSize: 18,
-  },
-});
 
 export default ProfileScreen;

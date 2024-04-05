@@ -1,54 +1,59 @@
-import React, { useState, useEffect, createContext, ReactNode, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 
-interface userData {
-  id: string;
-  username: string;
-  token: string;
+interface AuthContextType {
+  userId: string | null;
+  username: string | null;
+  login: (userId: string, username: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-type AuthContextType = {
-  userToken: string | null;
-  setUserToken: (token: string | null) => void;
-  userInfo: userData | null;
-  setUserInfo: (info: any) => void;
-};
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
-
-interface AuthProviderProps {
-  children: ReactNode;
+interface AuthProvideProps {
+  children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [userToken, setUserToken] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<any>(null);
+export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
-  const loadToken = async () => {
-    const token = await SecureStore.getItemAsync("userToken");
-    if (token) {
-      setUserToken(token);
+  useEffect(() => {
+    // Load user details from SecureStore on app boot
+    const loadUserDetails = async () => {
+      const storedUserId = await SecureStore.getItemAsync("userId");
+      const storedUsername = await SecureStore.getItemAsync("username");
+      if (storedUserId && storedUsername) {
+        setUserId(storedUserId);
+        setUsername(storedUsername);
+      }
+    };
+
+    loadUserDetails();
+  }, []);
+
+  const login = async (userId: string, username: string) => {
+    try {
+      console.log("userId:", userId);
+      console.log("username:", username);
+      await SecureStore.setItemAsync("userId", userId.toString());
+      await SecureStore.setItemAsync("username", username.toString());
+      setUserId(userId);
+      setUsername(username);
+    } catch (error) {
+      console.error("Error storing user details...", error);
     }
   };
 
-  useEffect(() => {
-    loadToken();
-  }, []);
-
-  const login = (userData: userData) => {
-    setUserToken(userData.token);
-    setUserInfo({ id: userData.id, username: userData.username });
-    // Store the user data in SecureStore as well
-    SecureStore.setItemAsync("userInfo", JSON.stringify(userData));
-    console.log("Stored user info in SecureStore");
+  const logout = async () => {
+    await SecureStore.deleteItemAsync("userId");
+    await SecureStore.deleteItemAsync("username");
+    setUserId(null);
+    setUsername(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ userToken, setUserToken, userInfo, setUserInfo }}
-    >
+    <AuthContext.Provider value={{ userId, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -15,12 +15,13 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import * as SecureStore from "expo-secure-store";
+import { useAuth } from "../Navigation/AuthContext";
 
 // Currently trying to figure out the proper type
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const handleLoginPress = async () => {
     try {
@@ -35,8 +36,7 @@ const LoginScreen = ({ navigation }: any) => {
       console.log("Login successful:", response.data);
       Alert.alert("Login Success", "You have logged in successfully!");
 
-      await SecureStore.setItemAsync("userId", response.data.id);
-      await SecureStore.setItemAsync("username", response.data.Username);
+      login(response.data.id, response.data.Username);
       console.log("User ID and username stored.");
 
       navigation.goBack();
@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      source={require('../imgs/leaves.jpg')}
+      source={require("../imgs/leaves.jpg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -87,41 +87,41 @@ const LoginScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputContainer: {
-    width: '100%', // Or a fixed width in pixels
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    width: "100%", // Or a fixed width in pixels
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 5,
     padding: 10,
     // Ensure there's no flex property causing dynamic changes in size
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // More opaque white for inputs
+    backgroundColor: "rgba(255, 255, 255, 0.9)", // More opaque white for inputs
     borderRadius: 5,
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
-    width: '100%', // Ensures the input stretches to fill the container
+    width: "100%", // Ensures the input stretches to fill the container
     height: 50, // Fixed height for all inputs
   },
   container: {
-    width: '90%',
+    width: "90%",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },
   title: {
-    color: 'white',
+    color: "white",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
   },
   Text: {
-    color: 'white',
+    color: "white",
     fontSize: 22,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
