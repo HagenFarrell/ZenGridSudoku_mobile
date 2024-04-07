@@ -1,13 +1,12 @@
+/*
+ *
+ *
+ *
+ */
 
-/* 
- * 
- * 
- * 
-*/
-
-import axios from 'axios';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, Alert } from 'react-native';
+import axios from "axios";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Button, TextInput, Alert } from "react-native";
 
 // Currently trying to figure out the proper type
 const RegisterScreen = ({ navigation }: any) => {
@@ -55,13 +54,17 @@ const RegisterScreen = ({ navigation }: any) => {
         requestBody
       );
 
-      // Handle the response from the server
-      console.log("Signup successful:", response.data);
-      Alert.alert(
-        "Signup Success",
-        "Your account has been successfully created."
-      );
-
+      if (response.status == 200) {
+        Alert.alert(
+          "Signup successfull.",
+          "Email verification sent. Please check your inbox."
+        );
+      } else {
+        Alert.alert(
+          "Signup failed.",
+          response.data.message || "An error occurred during signup."
+        );
+      }
     } catch (error) {
       // Handle errors
       if (axios.isAxiosError(error) && error.response) {
@@ -122,7 +125,7 @@ const RegisterScreen = ({ navigation }: any) => {
       <Button title="Tempback" onPress={() => navigation.goBack()}></Button>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

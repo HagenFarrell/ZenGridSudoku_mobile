@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      source={require("../imgs/leaves.jpg")}
+      source={require("../imgs/background.jpg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }: any) => {
           title="Register"
           onPress={() => navigation.navigate("RegisterScreen")}
         ></Button>
-        <Button title="Tempback" onPress={() => navigation.goBack()}></Button>
+        <Button title="Back" onPress={() => navigation.goBack()}></Button>
       </View>
     </ImageBackground>
   );
