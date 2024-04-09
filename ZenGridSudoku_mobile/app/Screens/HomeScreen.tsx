@@ -19,7 +19,8 @@ const HomeScreen = ({navigation}: any) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text onPress={() => navigation.navigate("LoginScreen")}>Home Screen (Click To Login)</Text>
-        <GridCell></GridCell>
+        <GridCell id={1} initValue={1} locked={true}></GridCell>
+        <GridCell id={2} initValue={2} locked={true}></GridCell>
     </View>
   );
 }

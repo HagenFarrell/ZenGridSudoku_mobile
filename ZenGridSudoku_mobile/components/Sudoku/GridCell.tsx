@@ -5,38 +5,77 @@
  * 
 */
 
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { values } from '@/constants/CellConstants';
+import { boardValues } from './SudokuGrid';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Pressable } from 'react-native';
 
 interface GridCellProps {
-  highlight?: string;
-  value?: number;         // integer clamped between 1 and 9
-  locked?: boolean;       // puzzle hints are locked
+  id: number;               // identifier [0, 80]
+  initValue: number;        // integer clamped between 0 and 9
+  locked: boolean;          // puzzle hints are locked
 }
 
-const GridCell: React.FC<GridCellProps> = ({ value, locked }) => {
+enum CellHighlights {
+  Selected = "lime",
+  Matching = "green",
+  Invalid = "red",
+  Locked = "silver",
+  Unlocked = "white"
+}
+
+const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
+  const [value, setValue] = useState(initValue);
+  const [highlight, setHighlight] = useState(locked ? CellHighlights.Locked : CellHighlights.Unlocked);
+
+  const test = () => {
+    setHighlight(
+      (highlight == CellHighlights.Selected) ? CellHighlights.Locked : CellHighlights.Selected
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{value}</Text>
-    </View>
-  );
+    <TouchableOpacity
+      style={[styles.container, { backgroundColor: highlight }]}
+      onPress={test}
+    >
+      <View>
+        <Text style={styles.text}>
+          {value}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
 };
 
-// Would a dynamic background color be here or part of the interface?
-// How much should be "hardcoded,"" can this be dynamic?
-// Can these become properties from the interface?
+// Some cell controls
+const cellValues = {
+  cellSize: boardValues.boardSize / 9,
+  innerWidth: boardValues.outerWidth / 3,
+  fontSize: 20
+};
+
 const styles = StyleSheet.create({
   container: {
-    width: values.cellSize,
-    height: values.cellSize,
-    borderWidth: values.innerWidth,
+    width: cellValues.cellSize,
+    height: cellValues.cellSize,
+    borderWidth: cellValues.innerWidth,
     borderColor: 'gray',
     alignItems: 'center',
     justifyContent: 'center'
   },
   text: {
-    fontSize: 20,
+    fontSize: cellValues.fontSize,
   },
 });
 
 export default GridCell;
+
+/*
+ * Values [1, 9] are normal states
+ *
+ * A cell takes on a value of 0 as unset and rendering nothing
+ * When 0 it also ommits itself from board validation
+ * 
+*/
