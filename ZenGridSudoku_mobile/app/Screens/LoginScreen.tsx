@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
+  TouchableOpacity,
   Alert,
   StyleSheet,
   TextInput,
@@ -73,18 +73,48 @@ const LoginScreen = ({ navigation }: any) => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Button title="Login" onPress={handleLoginPress} />
-        <Button
-          title="Register"
+      </View>
+      <View style={styles.buttonContainer}>
+        {/*Login button*/}
+        <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        {/* Navigation to RegisterScreen*/}
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => navigation.navigate("RegisterScreen")}
-        ></Button>
-        <Button title="Back" onPress={() => navigation.goBack()}></Button>
+        >
+          <Text style={styles.buttonText}>Signup</Text>
+        </TouchableOpacity>
+
+        {/* Back button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "white",
+    color: "black",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    padding: 10,
+    alignItems: 'center', // Center text horizontally
+    justifyContent: 'center', // Center text vertically
+  },
+  buttonText: {
+    color: 'black', // Ensures the text color is white
+    fontSize: 16, // You can adjust the size as needed
+  },
   backgroundImage: {
     flex: 1,
     justifyContent: "center",
@@ -110,13 +140,12 @@ const styles = StyleSheet.create({
     width: "90%",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
   },
-  title: {
-    color: "white",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+    width: "65%",
   },
   Text: {
     color: "white",
