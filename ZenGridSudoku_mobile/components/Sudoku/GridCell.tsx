@@ -7,8 +7,8 @@
 
 import { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { boardValues } from './SudokuBoard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { cellValues } from './BoardConstants';
 
 // properties are single use passed in
 interface GridCellProps {
@@ -47,6 +47,10 @@ const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
       ? (locked ? Highlight.Locked : Highlight.Unlocked)
       : Highlight.Selected
     );
+
+    console.log(
+      "You clicked cell: " + id
+    )
   };
 
   return (
@@ -61,28 +65,19 @@ const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
   )
 };
 
-// Some cell controls
-const cellValues = {
-  cellSize: boardValues.boardSize / 9,
-  innerWidth: boardValues.outerWidth / 3,
-  test: 21
-};
-
 const styles = StyleSheet.create({
   container: {
-  
-
-    width: cellValues.cellSize,
-    height: cellValues.cellSize,
+    // width: cellValues.cellSize,
+    // height: cellValues.cellSize,
 
     borderWidth: cellValues.innerWidth,
     borderColor: 'gray',
 
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   text: {
-    fontSize: cellValues.test,
+    fontSize: cellValues.fontSize,
   },
 });
 

@@ -8,6 +8,7 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import GridCell from "./GridCell";
+import { boardValues } from "./BoardConstants";
 
 interface SudokuBoardProps {
   initialState: string; // String length 81, numbers [0, 9]
@@ -41,32 +42,28 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ initialState }) => {
   // of the 'initialState' property
   useEffect(reset, [initialState]);
 
-  // const toGridCell = (val: any) => {
-  //   return <GridCell
-  //     id={val}
-  //     initValue={val}
-  //     locked={false}
-  //   />
-  // }
-
-  // const asRow = (row: any) => {
-  //   return row.map(toGridCell)
-  // }
-
   return (
     <View style={styles.container}>
-      <Text>{board}</Text>
+      {board.map((row, rowIndex) => (
+        <View key={rowIndex} style={styles.row}>
+          {row.map((val, cellIndex) => (
+            <View key={rowIndex * 9 + cellIndex} style={styles.region}>
+              <GridCell
+                key={rowIndex * 9 + cellIndex} // Existing key
+                id={rowIndex * 9 + cellIndex}
+                initValue={val}
+                locked={val !== 0}
+              // ... other props
+              />
+            </View>
+          ))}
+        </View>
+      ))}
     </View>
-  )
+  );
 };
 
-// 27 * 14
-// Some board controls
-export const boardValues = {
-  roundness: 10,
-  boardSize: Dimensions.get('screen').width * 0.97,
-  outerWidth: 6
-};
+
 
 const styles = StyleSheet.create({
   container: {
@@ -76,10 +73,23 @@ const styles = StyleSheet.create({
     borderWidth: boardValues.outerWidth,
     borderRadius: boardValues.roundness,
     borderColor: 'black',
+    backgroundColor: 'black',
 
-    flex: 0,
-    flexWrap: "wrap",
-    flexDirection: "row"
+    flex: 0,  // Allow the container to take up available space
+    flexDirection: 'column',  // Arrange regions vertically
+    flexWrap: 'wrap'  // Wrap rows
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  region: {
+    flex: 1,
+    borderWidth: boardValues.outerWidth / 2, // Thicker region borders
+
+    // Internal cell layout:
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   }
 })
 
