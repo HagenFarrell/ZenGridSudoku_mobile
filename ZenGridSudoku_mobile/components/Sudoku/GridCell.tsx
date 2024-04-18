@@ -6,18 +6,19 @@
 */
 
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { boardValues } from './SudokuGrid';
+import { Text, StyleSheet } from 'react-native';
+import { boardValues } from './SudokuBoard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Pressable } from 'react-native';
 
+// properties are single use passed in
 interface GridCellProps {
-  id: number;               // identifier [0, 80]
-  initValue: number;        // integer clamped between 0 and 9
-  locked: boolean;          // puzzle hints are locked
+  id: number;               // integer [0, 80]
+  initValue: number;        // integer [0, 9]
+  locked: boolean;          // givens locked
 }
 
-enum CellHighlights {
+// Colors
+enum Highlight {
   Selected = "lime",
   Matching = "green",
   Invalid = "red",
@@ -25,13 +26,26 @@ enum CellHighlights {
   Unlocked = "white"
 }
 
+enum Edge {
+  TL, T, TR,
+  L, C, R,
+  BL, B, BR
+}
+
 const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
-  const [value, setValue] = useState(initValue);
-  const [highlight, setHighlight] = useState(locked ? CellHighlights.Locked : CellHighlights.Unlocked);
+  // value modifiable via callbacks
+  const [value, setValue] = useState<number>(initValue);
+
+  // highlight modifiable via callbacks
+  const [highlight, setHighlight] = useState<Highlight>(
+    locked ? Highlight.Locked : Highlight.Unlocked
+  );
 
   const test = () => {
     setHighlight(
-      (highlight == CellHighlights.Selected) ? CellHighlights.Locked : CellHighlights.Selected
+      (highlight == Highlight.Selected)
+      ? (locked ? Highlight.Locked : Highlight.Unlocked)
+      : Highlight.Selected
     );
   };
 
@@ -40,11 +54,9 @@ const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
       style={[styles.container, { backgroundColor: highlight }]}
       onPress={test}
     >
-      <View>
-        <Text style={styles.text}>
-          {value}
-        </Text>
-      </View>
+      <Text style={styles.text}>
+        {value === 0 ? '' : value}
+      </Text>
     </TouchableOpacity>
   )
 };
@@ -53,20 +65,24 @@ const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
 const cellValues = {
   cellSize: boardValues.boardSize / 9,
   innerWidth: boardValues.outerWidth / 3,
-  fontSize: 20
+  test: 21
 };
 
 const styles = StyleSheet.create({
   container: {
+  
+
     width: cellValues.cellSize,
     height: cellValues.cellSize,
+
     borderWidth: cellValues.innerWidth,
     borderColor: 'gray',
+
     alignItems: 'center',
     justifyContent: 'center'
   },
   text: {
-    fontSize: cellValues.fontSize,
+    fontSize: cellValues.test,
   },
 });
 

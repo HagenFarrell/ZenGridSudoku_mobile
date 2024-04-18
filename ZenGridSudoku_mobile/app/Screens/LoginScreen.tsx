@@ -141,6 +141,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  title: {
+    color: "black",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
