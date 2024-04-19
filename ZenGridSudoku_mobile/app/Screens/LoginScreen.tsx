@@ -36,6 +36,7 @@ const LoginScreen = ({ navigation }: any) => {
       console.log("Login successful:", response.data);
       Alert.alert("Login Success", "You have logged in successfully!");
 
+      console.log("Response from server...", response.status);
       login(response.data.id, response.data.Username);
       console.log("User ID and username stored.");
 
@@ -135,6 +136,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: "100%", // Ensures the input stretches to fill the container
     height: 50, // Fixed height for all inputs
+  },
+  title: {
+    color: "black",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
   container: {
     width: "90%",
