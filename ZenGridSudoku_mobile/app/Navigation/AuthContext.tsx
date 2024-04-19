@@ -4,7 +4,8 @@ import * as SecureStore from "expo-secure-store";
 interface AuthContextType {
   userId: string | null;
   username: string | null;
-  login: (userId: string, username: string) => Promise<void>;
+  email: string | null;
+  login: (userId: string, username: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -17,6 +18,7 @@ interface AuthProvideProps {
 export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
     // Load user details from SecureStore on app boot
@@ -32,14 +34,17 @@ export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
     loadUserDetails();
   }, []);
 
-  const login = async (userId: string, username: string) => {
+  const login = async (userId: string, username: string, email: string) => {
     try {
       console.log("userId:", userId);
       console.log("username:", username);
+      console.log("email:", email)
       await SecureStore.setItemAsync("userId", userId.toString());
       await SecureStore.setItemAsync("username", username.toString());
+      await SecureStore.setItemAsync("email", email.toString());
       setUserId(userId);
       setUsername(username);
+      setEmail(email);
     } catch (error) {
       console.error("Error storing user details...", error);
     }
@@ -48,12 +53,13 @@ export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
   const logout = async () => {
     await SecureStore.deleteItemAsync("userId");
     await SecureStore.deleteItemAsync("username");
+    // Add a delete email as well for proper logout functionality...
     setUserId(null);
     setUsername(null);
   };
 
   return (
-    <AuthContext.Provider value={{ userId, username, login, logout }}>
+    <AuthContext.Provider value={{ userId, username, login, logout, email }}>
       {children}
     </AuthContext.Provider>
   );
