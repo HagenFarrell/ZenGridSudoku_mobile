@@ -42,54 +42,64 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ initialState }) => {
   // of the 'initialState' property
   useEffect(reset, [initialState]);
 
+  const renderBoard = (): JSX.Element[] => {
+    const test: JSX.Element[] = [];
+
+    for (let i = 0; i < 3; i++) {
+      test.push(
+        <GridCell
+          id={i}
+          initValue={i}
+          locked={true}
+        />
+      )
+    }
+
+    return test;
+  }
+
   return (
-    <View style={styles.container}>
-      {board.map((row, rowIndex) => (
-        <View key={rowIndex} style={styles.row}>
-          {row.map((val, cellIndex) => (
-            <View key={rowIndex * 9 + cellIndex} style={styles.region}>
-              <GridCell
-                key={rowIndex * 9 + cellIndex} // Existing key
-                id={rowIndex * 9 + cellIndex}
-                initValue={val}
-                locked={val !== 0}
-              // ... other props
-              />
-            </View>
-          ))}
-        </View>
-      ))}
+    <View style={styles.enclosingView}>
+      {renderBoard()}
     </View>
-  );
+  )
+
+  // return (
+  //   <View style={styles.container}>
+  //     {board.map((row, rowIndex) => (
+  //       <View key={rowIndex} style={styles.row}>
+  //         {row.map((val, cellIndex) => (
+  //           <View key={rowIndex * 9 + cellIndex} style={styles.region}>
+  //             <GridCell
+  //               key={rowIndex * 9 + cellIndex} // Existing key
+  //               id={rowIndex * 9 + cellIndex}
+  //               initValue={val}
+  //               locked={val !== 0}
+  //             // ... other props
+  //             />
+  //           </View>
+  //         ))}
+  //       </View>
+  //     ))}
+  //   </View>
+  // );
 };
 
-
-
 const styles = StyleSheet.create({
-  container: {
+  enclosingView: {
     width: boardValues.boardSize,
     height: boardValues.boardSize,
 
     borderWidth: boardValues.outerWidth,
     borderRadius: boardValues.roundness,
+
     borderColor: 'black',
-    backgroundColor: 'black',
-
-    flex: 0,  // Allow the container to take up available space
-    flexDirection: 'column',  // Arrange regions vertically
-    flexWrap: 'wrap'  // Wrap rows
+    backgroundColor: 'black'
   },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  region: {
-    flex: 1,
-    borderWidth: boardValues.outerWidth / 2, // Thicker region borders
-
-    // Internal cell layout:
-    flexDirection: 'row',
-    flexWrap: 'wrap'
+  cluster: {
+    borderColor: 'black',
+    backgroundColor: 'white',
+    borderWidth: 1
   }
 })
 
