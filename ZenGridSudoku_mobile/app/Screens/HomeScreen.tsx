@@ -6,7 +6,7 @@
 */
 
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
 import LoginScreen from './LoginScreen';
 import SudokuBoard from '@/components/Sudoku/SudokuBoard';
@@ -35,10 +35,19 @@ const HomeScreen = ({ navigation }: any) => {
   const gotoLoginScreen = () => navigation.navigate(LoginScreen.name);
   const display = "TEMP Home Screen (Click To Login)"
 
+  const [puzzle, setPuzzle] = useState<string>(dev_test)
+
   return (
     <View style={styles.container}>
-      <SudokuBoard initialState={one_test}></SudokuBoard>
+      <SudokuBoard initialState={puzzle}></SudokuBoard>
+      
       {/* <Button onPress={gotoLoginScreen} title={display}></Button> */}
+
+      <Button onPress={() => {
+        setPuzzle(
+          (puzzle.match(dev_test)) ? wrap_test : dev_test
+        )
+      }} title={"DYNAMIC TEST"}></Button>
     </View>
   );
 }

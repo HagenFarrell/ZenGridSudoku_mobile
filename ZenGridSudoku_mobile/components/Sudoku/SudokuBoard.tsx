@@ -15,20 +15,24 @@ interface SudokuBoardProps {
 }
 
 const SudokuBoard: React.FC<SudokuBoardProps> = ({ initialState }) => {
-  // Mutable board
-  const [board, setBoard] = useState<number[][]>([]);
+  // Prevent Render race conditions
   const [initialized, setInitialized] = useState<boolean>(false)
+  // Mutable and used for initialState
+  const [board, setBoard] = useState<number[][]>([]);
+  // Win condition
   const [solved, setSolved] = useState<boolean>(false)
-
-  // [-1, 80]
-  // -1 is no selection
-  // [0, 80] is the corresponding index (id of GridCell)
+  // [-1, 80] where -1 is no selection and [0, 80] used to map to board[][]
   const [selected, setSelected] = useState<number>(-1);
 
+  // Lambdas to reset the board to the initialState
   const toNumber = (char: string): number => parseInt(char, 10);
-
-  // Reset the board to the initialState
   const reset = () => {
+    // Reset other states
+    setInitialized(false)
+    setSolved(false)
+    setSelected(-1)
+
+    // Process new initialization data
     const parsedData = initialState.split("").map(toNumber);
 
     const grid = [];
@@ -41,9 +45,14 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ initialState }) => {
     setInitialized(true)
   }
 
-  // Initializes the board for the mandatory setting
-  // of the 'initialState' property
-  useEffect(reset, [initialState]);
+  // Uses the above lambda for resetting the board state to a new one on prop change
+  useEffect(() => {
+    reset()
+  }, [initialState]);
+
+  // Callbacks
+
+  // Handlers
 
   const render = () => {
     return (

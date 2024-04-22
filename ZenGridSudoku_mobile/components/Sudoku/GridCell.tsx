@@ -5,7 +5,7 @@
  * 
 */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { board } from './BoardConstants';
@@ -25,18 +25,20 @@ enum Highlight {
   Unlocked = "white"
 }
 
-const GridCell: React.FC<GridCellProps> = ({ id, init: initValue, locked }) => {
-  // value modifiable via callbacks
-  const [value, setValue] = useState<number>(initValue);
-
-  // highlight modifiable via callbacks
+const GridCell: React.FC<GridCellProps> = ({ id, init, locked }) => {
+  const [value, setValue] = useState<number>(0);
   const [highlight, setHighlight] = useState<Highlight>(
     locked ? Highlight.Locked : Highlight.Unlocked
   );
 
-  const select = () => {
+  // Re-render upon initialization of a new board
+  useEffect(() => setValue(init), [init])
 
-    // Set highlight state
+  // Callbacks
+
+  // Handlers
+
+  const select = () => {
     if (locked) {
       setHighlight(
         (highlight == Highlight.Locked) ? Highlight.SelectedLocked : Highlight.Locked
@@ -47,11 +49,6 @@ const GridCell: React.FC<GridCellProps> = ({ id, init: initValue, locked }) => {
         (highlight == Highlight.Unlocked) ? Highlight.SelectedUnlocked : Highlight.Unlocked
       );
     }
-
-    // Debug
-    // console.log(
-    //   "You clicked cell: " + id
-    // )
   };
 
   return (
