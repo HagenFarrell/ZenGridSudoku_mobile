@@ -37,8 +37,8 @@ const LoginScreen = ({ navigation }: any) => {
       Alert.alert("Login Success", "You have logged in successfully!");
 
       console.log("Response from server...", response.status);
-      login(response.data.id, response.data.Username);
-      console.log("User ID and username stored.");
+      login(response.data.id, response.data.Username, response.data.Email);
+      console.log("User ID, username and email stored.");
 
       navigation.goBack();
       // Navigate or update state as needed here
@@ -147,12 +147,6 @@ const styles = StyleSheet.create({
     width: "90%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  title: {
-    color: "black",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: "row",
