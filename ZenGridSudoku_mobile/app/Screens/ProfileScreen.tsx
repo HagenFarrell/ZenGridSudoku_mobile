@@ -4,7 +4,6 @@ import * as SecureStore from "expo-secure-store";
 import { useAuth } from "../Navigation/AuthContext";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-import { BlurView } from 'expo-blur';
 
 const ProfileScreen: React.FC = () => {
   const [userInfo, setUserInfo] = useState({
@@ -69,16 +68,10 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <View style={styles.backgroundContainer}>
-      <BlurView
-        style={styles.backgroundImage}
-        intensity={80}
-        tint="light"
-      >
         <Image
           style={styles.backgroundImage}
           source={require("../imgs/background.jpg")}
         />
-      </BlurView>
       <View style={styles.container}>
         {isLoading && <Text>Loading...</Text>}
         {error && <Text style={styles.error}>Error: {error}</Text>}
@@ -107,33 +100,34 @@ const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 0,
-    width: "80%",
+    width: "100%",
     justifyContent: "center",
     padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.14)',
   },
   error: {
     color: "red",
     marginBottom: 15,
   },
   heading: {
-    fontSize: 25,
+    fontSize: 27,
     fontWeight: "bold",
     marginBottom: 10,
   },
   statsHeading: {
     fontWeight: "bold",
-    marginTop: 20,
-    fontSize: 18,
-    marginBottom: 5,
+    marginTop: 25,
+    fontSize: 24,
+    marginBottom: 3,
   },
   statRow: {
     flexDirection: "row", // Arrange child elements horizontally
     height: "25%",
-    width: "40%",
+    width: "43%",
     justifyContent: "space-between", // Distribute containers evenly
   },
   statContainer: {
-    width: "100%",
+    width: "75%",
     height: "100%",
     borderRadius: 50, // Adjust for squared corners or use 40 for a circle
     justifyContent: "center",
@@ -159,12 +153,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-  },
-  profileContent: {
-    flex: 1, // Allow content to potentially take up the remaining space
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
   },
 });
 
