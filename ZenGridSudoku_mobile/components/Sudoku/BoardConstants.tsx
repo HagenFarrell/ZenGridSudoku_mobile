@@ -1,13 +1,21 @@
 import { Dimensions } from "react-native";
 
-export const boardValues = {
-    roundness: 10,
-    boardSize: Dimensions.get('screen').width * 0.97,
-    outerWidth: 6
-};
+const screenWidth = Dimensions.get('screen').width
+const percent = 0.95
 
-export const cellValues = {
-    cellSize: boardValues.boardSize / 9,
-    innerWidth: boardValues.outerWidth / 3,
+export const board = {
+    // Boarder roundness
+    roundness: 10,
+
+    // Box dimensions
+    boardSize: screenWidth * percent,
+    clusterSize: screenWidth * percent / 3,
+    cellSize: screenWidth * percent / 9,
+
+    // Boarder thickness
+    outerWidth: 4,
+    clusterWidth: 2,
+    cellWidth: 1,
+
     fontSize: 20
 };

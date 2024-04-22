@@ -6,33 +6,26 @@
 */
 
 import { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { cellValues } from './BoardConstants';
+import { board } from './BoardConstants';
 
 // properties are single use passed in
 interface GridCellProps {
   id: number;               // integer [0, 80]
-  initValue: number;        // integer [0, 9]
+  init: number;        // integer [0, 9]
   locked: boolean;          // givens locked
 }
 
-// Colors
+// Colors - matches website
 enum Highlight {
-  Selected = "lime",
-  Matching = "green",
-  Invalid = "red",
+  SelectedUnlocked = "#b1ffcb",
+  SelectedLocked = "#43a363",
   Locked = "silver",
   Unlocked = "white"
 }
 
-enum Edge {
-  TL, T, TR,
-  L, C, R,
-  BL, B, BR
-}
-
-const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
+const GridCell: React.FC<GridCellProps> = ({ id, init: initValue, locked }) => {
   // value modifiable via callbacks
   const [value, setValue] = useState<number>(initValue);
 
@@ -41,43 +34,59 @@ const GridCell: React.FC<GridCellProps> = ({ id, initValue, locked }) => {
     locked ? Highlight.Locked : Highlight.Unlocked
   );
 
-  const test = () => {
-    setHighlight(
-      (highlight == Highlight.Selected)
-      ? (locked ? Highlight.Locked : Highlight.Unlocked)
-      : Highlight.Selected
-    );
+  const select = () => {
 
-    console.log(
-      "You clicked cell: " + id
-    )
+    // Set highlight state
+    if (locked) {
+      setHighlight(
+        (highlight == Highlight.Locked) ? Highlight.SelectedLocked : Highlight.Locked
+      );
+    }
+    else {
+      setHighlight(
+        (highlight == Highlight.Unlocked) ? Highlight.SelectedUnlocked : Highlight.Unlocked
+      );
+    }
+
+    // Debug
+    // console.log(
+    //   "You clicked cell: " + id
+    // )
   };
 
   return (
-    <TouchableOpacity
-      style={[styles.container, { backgroundColor: highlight }]}
-      onPress={test}
-    >
-      <Text style={styles.text}>
-        {value === 0 ? '' : value}
-      </Text>
-    </TouchableOpacity>
+    <View style={styles.background}>
+      <TouchableOpacity
+        style={[styles.container, { backgroundColor: highlight }]}
+        onPress={select}
+      >
+        <Text style={styles.text}>
+          {value === 0 ? '' : value}
+        </Text>
+      </TouchableOpacity>
+    </View>
   )
 };
 
 const styles = StyleSheet.create({
   container: {
-    // width: cellValues.cellSize,
-    // height: cellValues.cellSize,
+    width: board.cellSize - board.clusterWidth,
+    height: board.cellSize - board.clusterWidth,
 
-    borderWidth: cellValues.innerWidth,
-    borderColor: 'gray',
+    borderWidth: board.cellWidth,
+    borderColor: 'black',
 
     alignItems: 'center',
     justifyContent: 'center',
   },
+  background: {
+    width: board.cellSize - board.clusterWidth,
+    height: board.cellSize - board.clusterWidth,
+
+    backgroundColor: 'white'
+  },
   text: {
-    fontSize: cellValues.fontSize,
+    fontSize: board.fontSize,
   },
 });
 
