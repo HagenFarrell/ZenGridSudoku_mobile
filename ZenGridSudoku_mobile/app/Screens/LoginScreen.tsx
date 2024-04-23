@@ -5,12 +5,12 @@
  */
 
 import axios, { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Alert,
+  Animated,
   StyleSheet,
   TextInput,
   ImageBackground,
@@ -22,6 +22,36 @@ const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Use this for error message
+  const bannerAnim = useRef(new Animated.Value(-100)).current;
+
+  const handleError = (errorMessage: string) => {
+    setIsErrorVisible(true);
+    setErrorMessage(errorMessage);
+    // Slide in by translating in the Y direction
+    Animated.timing(bannerAnim, {
+      toValue: 0, // Assuming the visible state is at translation Y of 0
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    setTimeout(() => {
+      hideErrorBanner();
+    }, 3000);
+  };
+
+  const hideErrorBanner = () => {
+    // Slide out by translating in the Y direction
+    Animated.timing(bannerAnim, {
+      toValue: -100, // Back to the original off-screen position
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsErrorVisible(false);
+      setErrorMessage("");
+    });
+  };
 
   const handleLoginPress = async () => {
     try {
@@ -34,8 +64,6 @@ const LoginScreen = ({ navigation }: any) => {
       );
 
       console.log("Login successful:", response.data);
-      Alert.alert("Login Success", "You have logged in successfully!");
-
       console.log("Response from server...", response.status);
       login(response.data.id, response.data.Username, response.data.Email);
       console.log("User ID, username and email stored.");
@@ -48,7 +76,7 @@ const LoginScreen = ({ navigation }: any) => {
         // Assuming the response.data is an object with a message property
         const message = (axiosError.response.data as { message: string })
           .message;
-        Alert.alert("Login Failed", message || "An unexpected error occurred");
+        handleError(message);
       }
       // Handle other error cases
     }
@@ -59,6 +87,16 @@ const LoginScreen = ({ navigation }: any) => {
       source={require("../imgs/background.jpg")}
       style={styles.backgroundImage}
     >
+      {isErrorVisible && (
+        <Animated.View
+          style={[
+            styles.errorBanner,
+            { transform: [{ translateY: bannerAnim }] },
+          ]}
+        >
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        </Animated.View>
+      )}
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
         <TextInput
@@ -109,11 +147,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 10,
-    alignItems: 'center', // Center text horizontally
-    justifyContent: 'center', // Center text vertically
+    alignItems: "center", // Center text horizontally
+    justifyContent: "center", // Center text vertically
   },
   buttonText: {
-    color: 'black', // Ensures the text color is white
+    color: "black", // Ensures the text color is white
     fontSize: 16, // You can adjust the size as needed
   },
   backgroundImage: {
@@ -158,6 +196,20 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 22,
     textAlign: "center",
+  },
+  errorBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 50,
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
