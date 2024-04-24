@@ -48,6 +48,7 @@ const HomeScreen = ({ navigation }: any) => {
           (puzzle.match(dev_test)) ? wrap_test : dev_test
         )
       }} title={"DYNAMIC TEST"}></Button>
+      <Button onPress={gotoLoginScreen} title={display}></Button>
     </View>
   );
 }

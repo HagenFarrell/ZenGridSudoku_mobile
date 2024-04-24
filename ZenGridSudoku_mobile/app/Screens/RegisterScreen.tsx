@@ -5,7 +5,7 @@
  */
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Animated,
   ImageBackground,
 } from "react-native";
 
@@ -22,6 +23,68 @@ const RegisterScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
+  const [isErrorVisible, setIsErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Use this for error message
+  const bannerAnim = useRef(new Animated.Value(-100)).current;
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const successBannerAnim = useRef(new Animated.Value(-100)).current;
+
+  const handleError = (errorMessage: string) => {
+    setIsErrorVisible(true);
+    setErrorMessage(errorMessage);
+    // Slide in by translating in the Y direction
+    Animated.timing(bannerAnim, {
+      toValue: 0, // Assuming the visible state is at translation Y of 0
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    setTimeout(() => {
+      hideErrorBanner();
+    }, 3000);
+  };
+
+  const hideErrorBanner = () => {
+    // Slide out by translating in the Y direction
+    Animated.timing(bannerAnim, {
+      toValue: -100, // Back to the original off-screen position
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsErrorVisible(false);
+      setErrorMessage("");
+    });
+  };
+
+  const showSuccessBanner = (message: string) => {
+    setIsSuccessVisible(true);
+    setSuccessMessage(message);
+
+    // Slide in the success banner
+    Animated.timing(successBannerAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    // Hide the banner after some time
+    setTimeout(() => {
+      hideSuccessBanner();
+    }, 3000);
+  };
+
+  const hideSuccessBanner = () => {
+    // Slide out the success banner
+    Animated.timing(successBannerAnim, {
+      toValue: -100,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsSuccessVisible(false);
+      setSuccessMessage("");
+    });
+  };
 
   // Replicate the password validation logic from the web app
   const isPasswordValid = () => {
@@ -35,17 +98,17 @@ const RegisterScreen = ({ navigation }: any) => {
   const handleSignupPress = async () => {
     // Check if passwords match and meet the security requirements
     if (password !== passwordCheck) {
-      Alert.alert("Error", "Passwords do not match.");
+      handleError("Passwords do not match.");
       return;
     }
 
     if (!isPasswordValid()) {
-      Alert.alert("Error", "Password does not meet security requirements.");
+      handleError("Password does not meet security requirements.");
       return;
     }
 
     if (email === "" || username === "") {
-      Alert.alert("Error", "All fields are required.");
+      handleError("All fields are required.");
       return;
     }
 
@@ -63,28 +126,18 @@ const RegisterScreen = ({ navigation }: any) => {
       );
 
       if (response.status == 200) {
-        Alert.alert(
-          "Signup successfull.",
-          "Email verification sent. Please check your inbox."
+        showSuccessBanner(
+          "Signup successful, check your inbox for verification email!"
         );
       } else {
-        Alert.alert(
-          "Signup failed.",
-          response.data.message || "An error occurred during signup."
-        );
+        handleError(response.data.message);
       }
     } catch (error) {
       // Handle errors
       if (axios.isAxiosError(error) && error.response) {
-        Alert.alert(
-          "Signup Failed",
-          error.response.data.message || "An error occurred during signup."
-        );
+        handleError(error.response.data.message);
       } else {
-        Alert.alert(
-          "Error",
-          "An error occurred during signup. Please try again later."
-        );
+        handleError("Error: An error occurred during signup.");
       }
     }
   };
@@ -94,6 +147,26 @@ const RegisterScreen = ({ navigation }: any) => {
       source={require("../imgs/night.jpg")}
       style={styles.backgroundImage}
     >
+      {isErrorVisible && (
+        <Animated.View
+          style={[
+            styles.errorBanner,
+            { transform: [{ translateY: bannerAnim }] },
+          ]}
+        >
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        </Animated.View>
+      )}
+      {isSuccessVisible && (
+        <Animated.View
+          style={[
+            styles.successBanner,
+            { transform: [{ translateY: successBannerAnim }] },
+          ]}
+        >
+          <Text style={styles.successText}>{successMessage}</Text>
+        </Animated.View>
+      )}
       <View style={styles.container}>
         <Text style={styles.title}>Sign Up</Text>
 
@@ -155,11 +228,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 10,
-    alignItems: 'center', // Center text horizontally
-    justifyContent: 'center', // Center text vertically
+    alignItems: "center", // Center text horizontally
+    justifyContent: "center", // Center text vertically
   },
   buttonText: {
-    color: 'black', // Ensures the text color is white
+    color: "black", // Ensures the text color is white
     fontSize: 16, // You can adjust the size as needed
   },
   backgroundImage: {
@@ -200,6 +273,37 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: "100%", // Ensures the input stretches to fill the container
     height: 50, // Fixed height for all inputs
+  },
+  errorBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 50,
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  successBanner: {
+    position: "absolute",
+    top: 0, 
+    left: 0,
+    right: 0,
+    height: 50,
+    backgroundColor: "green",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+    zIndex: 2,
+  },
+  successText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
