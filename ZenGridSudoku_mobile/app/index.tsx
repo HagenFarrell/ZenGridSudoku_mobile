@@ -22,7 +22,7 @@ const clearSecureStore = async () => {
     await SecureStore.deleteItemAsync("userId");
     await SecureStore.deleteItemAsync("username");
     await SecureStore.deleteItemAsync("email");
-    console.log("SecureStore cleared on app bootup.");
+    //console.log("SecureStore cleared on app bootup.");
   } catch (error) {
     console.error("Error clearing SecureStore:", error);
   }

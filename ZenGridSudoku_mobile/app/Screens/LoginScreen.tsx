@@ -40,8 +40,7 @@ const LoginScreen = ({ navigation }: any) => {
       login(response.data.id, response.data.Username, response.data.Email);
       console.log("User ID, username and email stored.");
 
-      navigation.goBack();
-      // Navigate or update state as needed here
+      navigation.goBack(); // Navigates back to the home/play screen.
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
@@ -77,7 +76,11 @@ const LoginScreen = ({ navigation }: any) => {
       </View>
       <View style={styles.buttonContainer}>
         {/*Login button*/}
-        <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+        <TouchableOpacity
+          testID="loginButton"
+          style={styles.button}
+          onPress={handleLoginPress}
+        >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
