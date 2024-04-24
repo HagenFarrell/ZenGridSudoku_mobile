@@ -9,13 +9,13 @@ export const board = {
 
     // Box dimensions
     boardSize: screenWidth * percent,
-    clusterSize: screenWidth * percent / 3,
-    cellSize: screenWidth * percent / 9,
+    clusterSize: screenWidth * percent / 3.01,
+    cellSize: screenWidth * percent / 9.03,
 
     // Boarder thickness
     outerWidth: 4,
     clusterWidth: 2,
     cellWidth: 1,
 
-    fontSize: 20
+    fontSize: 24
 };

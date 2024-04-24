@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
 import LoginScreen from './LoginScreen';
 import SudokuBoard from '@/components/Sudoku/SudokuBoard';
+import Sudoku from '@/components/Sudoku/Sudoku';
 
 //
 const empty_test = "000000000000000000000000000000000000000000000000000000000000000000000000000000000"
@@ -39,15 +40,16 @@ const HomeScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <SudokuBoard initialState={puzzle}></SudokuBoard>
-      
+      {/* <SudokuBoard type='easy' puzzle={-1} init={puzzle}></SudokuBoard> */}
       {/* <Button onPress={gotoLoginScreen} title={display}></Button> */}
 
-      <Button onPress={() => {
+      <Sudoku type='easy' puzzle={-1} init={puzzle}></Sudoku>
+
+      {/* <Button onPress={() => {
         setPuzzle(
           (puzzle.match(dev_test)) ? wrap_test : dev_test
         )
-      }} title={"DYNAMIC TEST"}></Button>
+      }} title={"DYNAMIC TEST"}></Button> */}
     </View>
   );
 }
