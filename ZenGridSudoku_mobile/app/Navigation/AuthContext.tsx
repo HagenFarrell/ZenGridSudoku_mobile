@@ -52,10 +52,11 @@ export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
 
   const logout = async () => {
     await SecureStore.deleteItemAsync("userId");
+    await SecureStore.deleteItemAsync("email");
     await SecureStore.deleteItemAsync("username");
-    // Add a delete email as well for proper logout functionality...
     setUserId(null);
     setUsername(null);
+    setEmail(null);
   };
 
   return (

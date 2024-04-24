@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useAuth } from "../Navigation/AuthContext";
 import axios from "axios";
@@ -66,12 +66,28 @@ const ProfileScreen: React.FC = () => {
     }, [userId, username, email])
   );
 
+  useEffect(() => {
+    if (!userId) {
+      setUserInfo({
+        userId: "",
+        username: "",
+        email: "",
+      });
+      setStats({
+        easy: 0,
+        medium: 0,
+        hard: 0,
+      });
+      setError(null); // Reset any errors as well
+    }
+  }, [userId]);
+
   return (
     <View style={styles.backgroundContainer}>
-        <Image
-          style={styles.backgroundImage}
-          source={require("../imgs/background.jpg")}
-        />
+      <Image
+        style={styles.backgroundImage}
+        source={require("../imgs/background.jpg")}
+      />
       <View style={styles.container}>
         {isLoading && <Text>Loading...</Text>}
         {error && <Text style={styles.error}>Error: {error}</Text>}
@@ -93,6 +109,9 @@ const ProfileScreen: React.FC = () => {
           </>
         )}
       </View>
+      <TouchableOpacity style={styles.logoutButton} onPress={useAuth().logout}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -103,7 +122,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.14)',
+    backgroundColor: "rgba(255, 255, 255, 0.14)",
   },
   error: {
     color: "red",
@@ -153,6 +172,21 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
+  },
+  logoutButton: {
+    width: "70%",
+    height: "4%",
+    backgroundColor: "red", // Red background for the button
+    borderRadius: 15,
+    marginLeft: 60,
+    alignItems: "center", // Center the text inside the button
+  },
+  logoutText: {
+    color: "white", // White text color
+    fontSize: 16,
+    fontWeight: "bold",
+    padding: 5,
+    alignContent: "center",
   },
 });
 

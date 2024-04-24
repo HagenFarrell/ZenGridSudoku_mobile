@@ -40,9 +40,7 @@ const HomeScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <SudokuBoard initialState={puzzle}></SudokuBoard>
-      
-      {/* <Button onPress={gotoLoginScreen} title={display}></Button> */}
-
+    
       <Button onPress={() => {
         setPuzzle(
           (puzzle.match(dev_test)) ? wrap_test : dev_test
