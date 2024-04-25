@@ -248,6 +248,9 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
       const storedUsername = await SecureStore.getItemAsync("username");
       const storedEmail = await SecureStore.getItemAsync("email");
 
+      console.log("storedUsername | " + storedUsername)
+      console.log("storedEmail | " + storedEmail)
+
       // Not logged in
       if (storedEmail == undefined || storedEmail == null || storedEmail.length == 0)
         return
@@ -255,7 +258,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
       switch (type) {
         case "easy":
           await axios.post(
-            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
               email: storedEmail,
               easy: 1
@@ -272,7 +275,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
           );
         case "medium":
           await axios.post(
-            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
               email: storedEmail,
               medium: 1
@@ -289,7 +292,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
           );
         case "hard":
           await axios.post(
-            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
               email: storedEmail,
               hard: 1
