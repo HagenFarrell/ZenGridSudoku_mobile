@@ -117,6 +117,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
 
   // Mutable and used for initialState
   const [board, setBoard] = useState<number[][]>([]);
+  const [win, setWin] = useState<boolean>(false)
   let solved = false
   let selected = -1; // [-1, 80]
 
@@ -203,7 +204,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
 
   const numPadClick = (val: number) => {
     const locked = lockedMap.get(selected)
-    // Only run if there is a selection
+    // Only run if there is a selection and it's not locked
     if (selected != -1 && locked != undefined && !locked) {
       // Update data structure
       board[Math.floor(selected / 9)][selected % 9] = val
@@ -221,7 +222,10 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
       }
     }
 
-    const win = validate()
+    solved = validate()
+    if (solved) {
+      setWin(true)
+    }
   }
 
   const validate = () => {
@@ -289,12 +293,21 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
   // Hardcoded
   return (
     <View>
+      {/* Win Overlay */}
+      <View></View>
+
+      {/* Back Button */}
+      <View>
+
+      </View>
+
       <View style={styles.rounded}>
         <View style={styles.enclosing}>
           {board.length == 0 ? null : render()}
         </View>
       </View>
 
+      {/* Number Pad */}
       <View style={styles.numpad}>
         <NumberPad val={1}></NumberPad>
         <NumberPad val={2}></NumberPad>
@@ -369,8 +382,8 @@ const styles = StyleSheet.create({
     fontSize: board.fontSize,
   },
   numpad: {
-    padding: 4,
-    top: 16, // synchronize with rounded.top
+    padding: 3,
+    top: 8, // synchronize with rounded.top
     flexDirection: 'row',
 
     alignItems: 'center',
@@ -383,8 +396,8 @@ const styles = StyleSheet.create({
     borderColor: 'lightskyblue',
     backgroundColor: 'lightskyblue',
 
-    width: board.cellSize,
-    height: board.cellSize,
+    width: board.cellSize * 0.9,
+    height: board.cellSize * 0.9,
 
     alignItems: 'center',
     justifyContent: 'center'

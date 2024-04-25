@@ -1,15 +1,32 @@
 
+import { board } from "@/components/Sudoku/BoardConstants";
 import Sudoku from "@/components/Sudoku/Sudoku";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const dev_test: string = "158723469367954821294816375619238540485690132732145986976381254841572693523469718"
 
 const PlayScreen = ({ navigation }: any) => {
 
   return (
-    <View style={styles.container}>
-      <Sudoku type={'easy'} puzzle={-1} init={dev_test}></Sudoku>
-    </View>
+    <ImageBackground
+      source={require("../imgs/background.jpg")}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Sudoku type={'easy'} puzzle={-1} init={dev_test}></Sudoku>
+
+        {/** Back Button */}
+        <View style={styles.back}>
+          <TouchableOpacity style={styles.button}>
+            <Text
+              style={styles.font}
+              onPress={navigation.goBack}
+            >Back</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -23,6 +40,33 @@ const styles = StyleSheet.create({
     // Debug, comment out
     // borderColor: 'green',
     // borderWidth: 10,
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  back: {
+    position: 'absolute',
+    padding: 10,
+
+    bottom: 0,
+    left: 0
+  },
+  button: {
+    width: 'auto',
+    height: 'auto',
+
+    padding: 5,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  font: {
+    fontSize: board.fontSize
   }
 })
 
