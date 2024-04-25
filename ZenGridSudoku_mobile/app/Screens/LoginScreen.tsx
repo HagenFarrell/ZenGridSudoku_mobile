@@ -65,7 +65,6 @@ const LoginScreen = ({ navigation }: any) => {
 
       login(response.data.id, response.data.Username, response.data.Email);
       navigation.goBack(); // Navigates back to the home/play screen.
-
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
@@ -94,7 +93,9 @@ const LoginScreen = ({ navigation }: any) => {
         </Animated.View>
       )}
       <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Login</Text>
+        </View>
         <TextInput
           style={styles.input}
           placeholder="email"
@@ -135,12 +136,12 @@ const LoginScreen = ({ navigation }: any) => {
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("ForgotPassword")}
-        >
-         <Text style={styles.buttonText}>Forgot password?</Text>
-        </TouchableOpacity>
+      >
+        <Text style={styles.buttonText}>Forgot password?</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#4CAF50", // A more vibrant green color for action buttons
     borderRadius: 50,
-    borderWidth: 2, // Remove border for a cleaner look
+    borderWidth: 1.5, // Remove border for a cleaner look
     paddingVertical: 12,
     paddingHorizontal: 20,
     marginVertical: 10, // Adds space between buttons
@@ -185,12 +186,6 @@ const styles = StyleSheet.create({
     width: "100%", // Ensures the input stretches to fill the container
     height: 50, // Fixed height for all inputs
   },
-  title: {
-    color: "black",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
   container: {
     width: "90%",
     justifyContent: "center",
@@ -223,6 +218,24 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  header: {
+    padding: 20,
+    marginTop: 0,
+    backgroundColor: "#4CAF50", // Use the primary color for coherence
+    width: "120%", // Full width to stretch across the screen
+    alignItems: "center", // Center align text
+    marginBottom: 30, // Spacing from the top element
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity:0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  headerText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  }
 });
 
 export default LoginScreen;

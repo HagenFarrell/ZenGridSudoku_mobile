@@ -167,7 +167,9 @@ const RegisterScreen = ({ navigation }: any) => {
         </Animated.View>
       )}
       <View style={styles.container}>
-        <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Signup</Text>
+        </View>
 
         {/* Username Input */}
         <TextInput
@@ -206,9 +208,11 @@ const RegisterScreen = ({ navigation }: any) => {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-        testID="signup-button"
-        style={styles.button} onPress={handleSignupPress}>
+        <TouchableOpacity
+          testID="signup-button"
+          style={styles.button}
+          onPress={handleSignupPress}
+        >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -312,6 +316,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  header: {
+    padding: 20,
+    marginTop: 0,
+    backgroundColor: "#4CAF50", // Use the primary color for coherence
+    width: "120%", // Full width to stretch across the screen
+    alignItems: "center", // Center align text
+    marginBottom: 30, // Spacing from the top element
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity:0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  headerText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  }
 });
 
 export default RegisterScreen;
