@@ -1,7 +1,7 @@
 
-/* 
+/* DEPRECATED DO NOT USE
  * 
- * This element has the interactable properties of our SudokuGrid
+ * SCHEDULED FOR REMOVAL
  * 
 */
 
@@ -15,39 +15,72 @@ interface GridCellProps {
   id: number;               // integer [0, 80]
   init: number;        // integer [0, 9]
   locked: boolean;          // givens locked
+  selectCallback: (
+    arg0: number,
+    arg1: number,
+    arg2: boolean,
+    arg3: React.Dispatch<React.SetStateAction<number>>,
+    arg4: (arg0: boolean) => void
+  ) => void
 }
 
 // Colors - matches website
-enum Highlight {
+export enum Highlight {
   SelectedUnlocked = "#b1ffcb",
   SelectedLocked = "#43a363",
   Locked = "silver",
-  Unlocked = "white"
+  Unlocked = "white",
+  Flash = "white"
 }
 
-const GridCell: React.FC<GridCellProps> = ({ id, init, locked }) => {
+const GridCell: React.FC<GridCellProps> = ({ id, init, locked, selectCallback }) => {
   const [value, setValue] = useState<number>(0);
   const [highlight, setHighlight] = useState<Highlight>(
     locked ? Highlight.Locked : Highlight.Unlocked
   );
 
   // Re-render upon initialization of a new board
-  useEffect(() => setValue(init), [init])
+  useEffect(() => {
+    setValue(init)
+    setHighlight(locked ? Highlight.Locked : Highlight.Unlocked)
+  }, [init])
 
-  // Callbacks
+  useEffect(() => {
+    selectCallback(id, Infinity, locked, setValue, updateHighlight)
+  }, [selectCallback])
+
+  // Toggle highlight based on whether selected or not
+  const updateHighlight = (deselect: boolean) => {
+    if (deselect) {
+      setHighlight(
+        (locked)
+          ? Highlight.Locked
+          : Highlight.Unlocked
+      )
+      return
+    }
+
+    setHighlight(
+      (locked)
+        ? (highlight == Highlight.Locked) ? Highlight.SelectedLocked : Highlight.Locked
+        : (highlight == Highlight.Unlocked) ? Highlight.SelectedUnlocked : Highlight.Unlocked
+    )
+  }
 
   // Handlers
 
   const select = () => {
-    if (locked) {
-      setHighlight(
-        (highlight == Highlight.Locked) ? Highlight.SelectedLocked : Highlight.Locked
-      );
-    }
-    else {
-      setHighlight(
-        (highlight == Highlight.Unlocked) ? Highlight.SelectedUnlocked : Highlight.Unlocked
-      );
+    const color = (locked)
+      ? (highlight == Highlight.Locked) ? Highlight.SelectedLocked : Highlight.Locked
+      : (highlight == Highlight.Unlocked) ? Highlight.SelectedUnlocked : Highlight.Unlocked
+
+    setHighlight(color)
+
+    // if (condition) deselect else select
+    if (color == Highlight.Locked || color == Highlight.Unlocked) {
+      selectCallback(NaN, NaN, locked, setValue, updateHighlight)
+    } else {
+      selectCallback(id, init, locked, setValue, updateHighlight)
     }
   };
 
