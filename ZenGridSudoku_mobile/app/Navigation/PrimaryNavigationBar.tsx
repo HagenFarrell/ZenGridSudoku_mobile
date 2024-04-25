@@ -71,7 +71,9 @@ const PrimaryNavigationBar = () => {
     <BottomBar.Navigator screenOptions={navigationBarOptions}>
       <BottomBar.Screen name="Home" component={HomeScreenStack} />
       <BottomBar.Screen name="Profile" component={ProfileScreen} />
-      <BottomBar.Screen name="Settings" component={SettingsScreen} />
+
+      {/* Deprecated */}
+      {/* <BottomBar.Screen name="Settings" component={SettingsScreen} /> */}
     </BottomBar.Navigator>
   );
 }
