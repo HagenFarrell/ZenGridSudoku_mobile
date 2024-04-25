@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Animated,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 
@@ -124,7 +125,9 @@ const ForgotPasswordScreen = ({ navigation }: any) => {
             <Text style={styles.successText}>{successMessage}</Text>
           </Animated.View>
         )}
-        <Text style={styles.title}>Reset your password</Text>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Reset your password!</Text>
+        </View>
         <TextInput
           style={styles.input}
           onChangeText={setEmail}
@@ -133,7 +136,9 @@ const ForgotPasswordScreen = ({ navigation }: any) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <Button title="Send Reset Link" onPress={handleSendLink} />
+        <TouchableOpacity style={styles.button} onPress={handleSendLink}>
+          <Text style={styles.buttonText}>Send Reset Link</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -142,44 +147,58 @@ const ForgotPasswordScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "90%",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    width: "100%",
   },
   backgroundImage: {
     flex: 1,
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
-    color: "black",
+  header: {
+    width: "120%",
+    padding: 15,
+    backgroundColor: "#0572a1", // Consistent green theme
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  headerText: {
+    color: "white",
+    fontSize: 24,
     fontWeight: "bold",
-    fontSize: 22,
-    marginBottom: 20,
   },
   input: {
     width: "100%",
     height: 40,
     padding: 10,
     marginBottom: 20,
-    borderWidth: 1,
     backgroundColor: "rgba(255, 255, 255, 1)",
-    borderColor: "#ccc",
+    borderColor: "#000",
     borderRadius: 5,
+    borderWidth: 1.5,
   },
-  errorBanner: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 50,
-    backgroundColor: "red",
+  button: {
+    backgroundColor: "#0572a1",
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    width: "80%",
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  errorText: {
+  buttonText: {
     color: "white",
+    fontSize: 18,
     fontWeight: "bold",
   },
   successBanner: {
@@ -197,6 +216,20 @@ const styles = StyleSheet.create({
   successText: {
     color: "white",
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  errorBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 50,
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorText: {
+    color: "white",
     fontWeight: "bold",
   },
 });
