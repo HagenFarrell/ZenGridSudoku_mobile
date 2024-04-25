@@ -184,6 +184,7 @@ const RegisterScreen = ({ navigation }: any) => {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
+          autoCapitalize="none"
         />
 
         {/* Password Input */}
@@ -205,7 +206,9 @@ const RegisterScreen = ({ navigation }: any) => {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleSignupPress}>
+        <TouchableOpacity 
+        testID="signup-button"
+        style={styles.button} onPress={handleSignupPress}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -289,7 +292,7 @@ const styles = StyleSheet.create({
   },
   successBanner: {
     position: "absolute",
-    top: 0, 
+    top: 0,
     left: 0,
     right: 0,
     height: 50,

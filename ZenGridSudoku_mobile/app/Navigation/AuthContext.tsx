@@ -36,9 +36,6 @@ export const AuthProvider: React.FC<AuthProvideProps> = ({ children }) => {
 
   const login = async (userId: string, username: string, email: string) => {
     try {
-      console.log("userId:", userId);
-      console.log("username:", username);
-      console.log("email:", email)
       await SecureStore.setItemAsync("userId", userId.toString());
       await SecureStore.setItemAsync("username", username.toString());
       await SecureStore.setItemAsync("email", email.toString());
