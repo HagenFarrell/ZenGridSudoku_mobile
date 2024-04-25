@@ -248,15 +248,19 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
       const storedUsername = await SecureStore.getItemAsync("username");
       const storedEmail = await SecureStore.getItemAsync("email");
 
-      console.log("storedUsername | " + storedUsername)
-      console.log("storedEmail | " + storedEmail)
+      // console.log("DETECTED TYPE | " + type)
+      // console.log("storedUsername | " + storedUsername)
+      // console.log("storedEmail | " + storedEmail)
 
       // Not logged in
       if (storedEmail == undefined || storedEmail == null || storedEmail.length == 0)
         return
 
+      // console.log("PASSED")
+
       switch (type) {
         case "easy":
+          // console.log("Updating EASY")
           await axios.post(
             "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
@@ -273,7 +277,11 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
               time_easy: time
             }
           );
+
+          break
+
         case "medium":
+          // console.log("Updating MEDIUM")
           await axios.post(
             "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
@@ -290,7 +298,11 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
               time_medium: time
             }
           );
+
+          break
+
         case "hard":
+          // console.log("Updating HARD")
           await axios.post(
             "http://sudokuapp-f0e20225784a.herokuapp.com/api/updateCompletion",
             {
@@ -307,11 +319,14 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
               time_hard: time
             }
           );
+
+          break
       }
     }
     catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
+        console.log(axiosError)
       }
     }
   };

@@ -21,11 +21,6 @@ const PuzzleSelect = ({ navigation }: any) => {
   (global as any).puzzleCtx = "";
   (global as any).initCtx = "";
 
-  useEffect(() => {
-    (global as any).typeCtx = "";
-    (global as any).puzzleCtx = "";
-  }, [type, puzzle]);
-
   const gotoPlayScreen = () => navigation.navigate(PlayScreen.name);
 
   // Sanitize and validate input
@@ -75,6 +70,8 @@ const PuzzleSelect = ({ navigation }: any) => {
         puzzle_number: parseInt(puzzle),
       });
 
+      (global as any).typeCtx = type;
+      (global as any).puzzleCtx = puzzle;
       (global as any).initCtx = response.data.puzzlestring;
 
       // If all goes well
