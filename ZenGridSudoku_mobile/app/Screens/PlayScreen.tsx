@@ -1,42 +1,29 @@
-import React, { useContext, useEffect } from "react";
-import { View, Text } from "react-native";
-import { AuthContext } from "@/app/Navigation/AuthContext"; 
-import { StackNavigationProp } from "@react-navigation/stack";
 
-type RootStackParamList = {
-  LoginScreen: undefined;
-  // other screens...
-};
+import Sudoku from "@/components/Sudoku/Sudoku";
+import { StyleSheet, View } from "react-native";
 
-type PlayScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, "LoginScreen">;
-};
+const dev_test: string = "158723469367954821294816375619238540485690132732145986976381254841572693523469718"
 
-const PlayScreen: React.FC<PlayScreenProps> = ({ navigation }) => {
-  const context = useContext(AuthContext);
+const PlayScreen = ({ navigation }: any) => {
 
-  // Check to make sure 
-  if(!context)
-  {
-    return null;
-  }
-
-  const { userToken } = context;
-
-  useEffect(() => 
-  {
-    // If no user token is present, navigate to the LoginScreen
-    if (!userToken) {
-      navigation.navigate("LoginScreen");
-    }
-  }, [userToken, navigation]);
-
-  // If the user is logged in (token exists), render the PlayScreen content
   return (
-    <View>
-      <Text>Welcome to the Play Screen</Text>
+    <View style={styles.container}>
+      <Sudoku type={'easy'} puzzle={-1} init={dev_test}></Sudoku>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    // Debug, comment out
+    // borderColor: 'green',
+    // borderWidth: 10,
+  }
+})
 
 export default PlayScreen;
