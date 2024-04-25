@@ -12,7 +12,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Alert,
   Animated,
   ImageBackground,
 } from "react-native";
