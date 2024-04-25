@@ -17,7 +17,11 @@ const PlayScreen = ({ navigation }: any) => {
     >
       <View style={styles.container}>
 
-        <Sudoku type={(global as any).typeCtx} puzzle={parseInt((global as any).puzzleCtx)} init={(global as any).initCtx}></Sudoku>
+        <Sudoku
+          type={(global as any).typeCtx}
+          puzzle={parseInt((global as any).puzzleCtx)}
+          init={(global as any).initCtx}>
+        </Sudoku>
 
         {/** Back Button */}
         <View style={styles.back}>
@@ -25,7 +29,9 @@ const PlayScreen = ({ navigation }: any) => {
             <Text
               style={styles.font}
               onPress={navigation.goBack}
-            >Back</Text>
+            >
+              Back
+            </Text>
           </TouchableOpacity>
         </View>
 

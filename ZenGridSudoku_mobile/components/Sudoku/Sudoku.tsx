@@ -5,10 +5,12 @@
  * 
 */
 
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import { board } from "./BoardConstants";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios, { AxiosError } from "axios";
+import * as SecureStore from "expo-secure-store";
 
 interface SudokuProps {
   type: ('easy' | 'medium' | 'hard')
@@ -33,26 +35,26 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
 
   interface TileProps {
     id: number;               // integer [0, 80]
-    init: number;        // integer [0, 9]
+    initTile: number;        // integer [0, 9]
     locked: boolean;          // givens locked
   }
 
-  const Tile: React.FC<TileProps> = ({ id, init }) => {
+  const Tile: React.FC<TileProps> = ({ id, initTile }) => {
     const [value, setValue] = useState<number>(0);
     const [highlight, setHighlight] = useState<Highlight>(
-      init != 0 ? Highlight.Locked : Highlight.Unlocked
+      initTile != 0 ? Highlight.Locked : Highlight.Unlocked
     );
 
     // Map callbacks to Sudoku
     valueMap.set(id, setValue)
     highlightMap.set(id, setHighlight)
-    lockedMap.set(id, init != 0)
+    lockedMap.set(id, initTile != 0)
 
     // Re-render upon initialization of a new board
     useEffect(() => {
-      setValue(init)
-      setHighlight(init != 0 ? Highlight.Locked : Highlight.Unlocked)
-    }, [init])
+      setValue(initTile)
+      setHighlight(initTile != 0 ? Highlight.Locked : Highlight.Unlocked)
+    }, [initTile])
 
     return (
       <View style={styles.background}>
@@ -121,6 +123,11 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
   let solved = false
   let selected = -1; // [-1, 80]
 
+  let time = 0
+  setInterval(() => {
+    time += 77
+  }, 77)
+
   // Setter holders
   const valueMap = new Map<number, React.Dispatch<React.SetStateAction<number>>>();
   const highlightMap = new Map<number, React.Dispatch<React.SetStateAction<Highlight>>>();
@@ -131,6 +138,8 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
     // Reset states
     solved = false
     selected = -1
+    time = 0
+    // setWin(false)
     setBoard(newBoard());
   }
 
@@ -222,11 +231,87 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
       }
     }
 
+    // When validate is true
     solved = validate()
     if (solved) {
-      setWin(true)
+      onWin()
     }
   }
+
+  const onWin = () => {
+    setWin(true)
+    updateStats()
+  }
+
+  const updateStats = async () => {
+    try {
+      const storedUsername = await SecureStore.getItemAsync("username");
+      const storedEmail = await SecureStore.getItemAsync("email");
+
+      // Not logged in
+      if (storedEmail == undefined || storedEmail == null || storedEmail.length == 0)
+        return
+
+      switch (type) {
+        case "easy":
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            {
+              email: storedEmail,
+              easy: 1
+            }
+          );
+
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            {
+              username: storedUsername,
+              puzzle_number: puzzle,
+              time_easy: time
+            }
+          );
+        case "medium":
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            {
+              email: storedEmail,
+              medium: 1
+            }
+          );
+
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_medium",
+            {
+              username: storedUsername,
+              puzzle_number: puzzle,
+              time_medium: time
+            }
+          );
+        case "hard":
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_easy",
+            {
+              email: storedEmail,
+              hard: 1
+            }
+          );
+
+          await axios.post(
+            "http://sudokuapp-f0e20225784a.herokuapp.com/api/setusertime_hard",
+            {
+              username: storedUsername,
+              puzzle_number: puzzle,
+              time_hard: time
+            }
+          );
+      }
+    }
+    catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+      }
+    }
+  };
 
   const validate = () => {
     const found = new Set<string>()
@@ -274,7 +359,7 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
           <Tile
             key={id}
             id={id}
-            init={val}
+            initTile={val}
             locked={val != 0}
           />
         )
@@ -290,15 +375,21 @@ const Sudoku: React.FC<SudokuProps> = ({ type, puzzle, init }) => {
     return clusters
   }
 
+  const renderWinBox = () => {
+    return (!win) ? null : (
+      <View style={styles.winBox}>
+        <Text style={styles.font}>Sudoku Solved!</Text>
+      </View>
+    )
+  }
+
   // Hardcoded
   return (
     <View>
+      {renderWinBox()}
+
       {/* Win Overlay */}
-      <View></View>
-
-      {/* Back Button */}
       <View>
-
       </View>
 
       <View style={styles.rounded}>
@@ -401,6 +492,53 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  winBox: {
+    position: 'absolute',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: '#e4f1bce0',
+    borderRadius: 10,
+
+    zIndex: 2,
+    padding: 20,
+
+    height: 'auto',
+    width: 'auto',
+
+    top: 200,
+    left: 120
+  },
+  font: {
+    fontSize: board.fontSize,
+    fontWeight: "bold",
+  },
+
+
+
+  // Deprecated
+  successBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    backgroundColor: "green",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+    zIndex: 2,
+  },
+  successText: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: 'center',
+
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   }
 })
 
