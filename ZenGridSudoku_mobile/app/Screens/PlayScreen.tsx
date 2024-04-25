@@ -1,8 +1,10 @@
 
 import { board } from "@/components/Sudoku/BoardConstants";
 import Sudoku from "@/components/Sudoku/Sudoku";
+import { useContext } from "react";
 import { Dimensions, ImageBackground, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SudokuContext from "../Navigation/SudokuContext";
 
 const dev_test: string = "158723469367954821294816375619238540485690132732145986976381254841572693523469718"
 
@@ -14,7 +16,8 @@ const PlayScreen = ({ navigation }: any) => {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
-        <Sudoku type={'easy'} puzzle={-1} init={dev_test}></Sudoku>
+
+        <Sudoku type={(global as any).typeCtx} puzzle={parseInt((global as any).puzzleCtx)} init={(global as any).initCtx}></Sudoku>
 
         {/** Back Button */}
         <View style={styles.back}>
@@ -25,6 +28,7 @@ const PlayScreen = ({ navigation }: any) => {
             >Back</Text>
           </TouchableOpacity>
         </View>
+
       </View>
     </ImageBackground>
   );

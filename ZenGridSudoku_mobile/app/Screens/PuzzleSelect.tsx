@@ -3,15 +3,25 @@ import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 import PlayScreen from "./PlayScreen";
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
+import SudokuContext from "../Navigation/SudokuContext";
 
 const PuzzleSelect = ({ navigation }: any) => {
   // Possibly change to let statements
-  const [type, setType] = useState<('easy' | 'medium' | 'hard')>('easy')
-  const [puzzle, setPuzzle] = useState<string>("1")
-  let init = ""
+  const [type, setType] = useState<('easy' | 'medium' | 'hard')>('easy');
+  const [puzzle, setPuzzle] = useState<string>("1");
+
+  (global as any).typeCtx = "";
+  (global as any).puzzleCtx = "";
+  (global as any).initCtx = "";
+
+  useEffect(() => {
+    (global as any).typeCtx = "";
+    (global as any).puzzleCtx = "";
+  }, [type, puzzle])
 
   const gotoPlayScreen = () => navigation.navigate(PlayScreen.name)
 
+  // Sanitize and validate input
   const handleInput = (input: string) => {
     if (input.length > 2)
       return
@@ -32,6 +42,7 @@ const PuzzleSelect = ({ navigation }: any) => {
     setPuzzle(input)
   }
 
+  // Random Puzzle
   const types: ('easy' | 'medium' | 'hard')[] = ["easy", "medium", "hard"]
   const randomPuzzle = () => {
     const type: number = Math.floor(Math.random() * 3)
@@ -64,11 +75,14 @@ const PuzzleSelect = ({ navigation }: any) => {
         }
       );
 
-      init = response.data.puzzlestring
+      (global as any).initCtx = response.data.puzzlestring
 
-      // login(response.data.id, response.data.Username, response.data.Email);
-      // navigation.goBack(); // Navigates back to the home/play screen.
-    } catch (error) {
+
+
+      // If all goes well
+      gotoPlayScreen()
+    }
+    catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
         // Assuming the response.data is an object with a message property
@@ -84,6 +98,7 @@ const PuzzleSelect = ({ navigation }: any) => {
   }
 
   return (
+
     <View style={styles.container}>
       {/* DEBUG */}
       <View>
@@ -145,7 +160,7 @@ const PuzzleSelect = ({ navigation }: any) => {
       {/* Play Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={gotoPlayScreen}
+        onPress={requestPuzzle}
       >
         <Text style={styles.font}>Start</Text>
       </TouchableOpacity>
