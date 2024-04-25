@@ -63,12 +63,9 @@ const LoginScreen = ({ navigation }: any) => {
         }
       );
 
-      console.log("Login successful:", response.data);
-      console.log("Response from server...", response.status);
       login(response.data.id, response.data.Username, response.data.Email);
-      console.log("User ID, username and email stored.");
-
       navigation.goBack(); // Navigates back to the home/play screen.
+
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
@@ -137,13 +134,13 @@ const LoginScreen = ({ navigation }: any) => {
         >
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+      </View>
+      <TouchableOpacity 
         style={styles.button}
         onPress={() => navigation.navigate("ForgotPassword")}
         >
          <Text style={styles.buttonText}>Forgot password?</Text>
         </TouchableOpacity>
-      </View>
     </ImageBackground>
   );
 };

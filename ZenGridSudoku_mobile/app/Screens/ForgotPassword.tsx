@@ -6,6 +6,7 @@ import {
   Button,
   StyleSheet,
   Animated,
+  ImageBackground,
 } from "react-native";
 import axios from "axios";
 
@@ -83,66 +84,77 @@ const ForgotPasswordScreen = ({ navigation }: any) => {
         }
       );
       const data = response.data;
-      if (data.success) {
-        showSuccessBanner("Password reset link sent! Check your email.");
+      if (response.status == 200) {
+        showSuccessBanner(data.message);
 
         setTimeout(() => {
           navigation.goBack();
         }, 2000);
-        
       } else {
         handleError(data.message);
       }
     } catch (error) {
-      alert("Failed to send password reset link");
-      console.error("API Error:");
+      handleError("Failed to send password reset link");
     }
   };
 
   return (
-    <View style={styles.container}>
-      {isErrorVisible && (
-        <Animated.View
-          style={[
-            styles.errorBanner,
-            { transform: [{ translateY: bannerAnim }] },
-          ]}
-        >
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        </Animated.View>
-      )}
-      {isSuccessVisible && (
-        <Animated.View
-          style={[
-            styles.successBanner,
-            { transform: [{ translateY: successBannerAnim }] },
-          ]}
-        >
-          <Text style={styles.successText}>{successMessage}</Text>
-        </Animated.View>
-      )}
-      <Text style={styles.title}>Reset your password</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Enter your email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <Button title="Send Reset Link" onPress={handleSendLink} />
-    </View>
+    <ImageBackground
+      source={require("../imgs/pass.jpg")}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        {isErrorVisible && (
+          <Animated.View
+            style={[
+              styles.errorBanner,
+              { transform: [{ translateY: bannerAnim }] },
+            ]}
+          >
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          </Animated.View>
+        )}
+        {isSuccessVisible && (
+          <Animated.View
+            style={[
+              styles.successBanner,
+              { transform: [{ translateY: successBannerAnim }] },
+            ]}
+          >
+            <Text style={styles.successText}>{successMessage}</Text>
+          </Animated.View>
+        )}
+        <Text style={styles.title}>Reset your password</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <Button title="Send Reset Link" onPress={handleSendLink} />
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "90%",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
+    color: "black",
+    fontWeight: "bold",
     fontSize: 22,
     marginBottom: 20,
   },
@@ -152,6 +164,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     borderWidth: 1,
+    backgroundColor: "rgba(255, 255, 255, 1)",
     borderColor: "#ccc",
     borderRadius: 5,
   },
