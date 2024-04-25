@@ -174,19 +174,25 @@ const styles = StyleSheet.create({
     right: 0,
   },
   logoutButton: {
-    width: "70%",
-    height: "4%",
-    backgroundColor: "red", // Red background for the button
-    borderRadius: 15,
-    marginLeft: 60,
-    alignItems: "center", // Center the text inside the button
+    backgroundColor: "#4CAF50", // Using the green color for consistency
+    borderRadius: 25, // More pronounced rounded corners
+    borderWidth: 2,
+    paddingVertical: 10, // Adequate padding for touchability
+    paddingHorizontal: 20, // Horizontal padding for better width management
+    alignSelf: "center", // Ensure the button is centered in its container
+    marginTop: 20, // Space from other elements
+    width: "80%", // Relative width for consistency across devices
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // For Android: subtle shadow for a "lifted" effect
   },
   logoutText: {
-    color: "white", // White text color
-    fontSize: 16,
+    color: "white",
+    fontSize: 18,
     fontWeight: "bold",
-    padding: 5,
-    alignContent: "center",
+    textAlign: "center", // Ensure text is centered within the button
   },
 });
 

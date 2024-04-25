@@ -147,18 +147,22 @@ const LoginScreen = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "white",
-    color: "black",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 10,
-    alignItems: "center", // Center text horizontally
-    justifyContent: "center", // Center text vertically
+    backgroundColor: "#4CAF50", // A more vibrant green color for action buttons
+    borderRadius: 50,
+    borderWidth: 2, // Remove border for a cleaner look
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginVertical: 10, // Adds space between buttons
+    width: "80%", // Ensures buttons are uniformly sized
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // Adds subtle elevation for material design feel
   },
   buttonText: {
-    color: "black", // Ensures the text color is white
-    fontSize: 16, // You can adjust the size as needed
+    color: "white", // Ensures the text color is white
+    fontSize: 18, // You can adjust the size as needed
   },
   backgroundImage: {
     flex: 1,
@@ -194,9 +198,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 20,
-    width: "65%",
+    justifyContent: "space-between", // Change this to space-around for better spacing
+    alignItems: "center", // Ensure vertical alignment is centered
+    padding: 10,
+    width: "35%", // Adjust width to 100% of its container
+    marginRight: 200,
   },
   Text: {
     color: "white",
