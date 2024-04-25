@@ -20,7 +20,7 @@ const PlayScreen = ({ navigation }: any) => {
         <Sudoku
           type={(global as any).typeCtx}
           puzzle={parseInt((global as any).puzzleCtx)}
-          init={dev_test}>
+          init={(global as any).initCtx}>
         </Sudoku>
 
         {/** Back Button */}
