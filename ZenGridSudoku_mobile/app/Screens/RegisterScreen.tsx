@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white", // Ensures the text color is white
-    fontSize: 15, // You can adjust the size as needed
+    fontSize: 13, // You can adjust the size as needed
   },
   backgroundImage: {
     flex: 1,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 20,
-    marginRight: 113,
+    marginRight: 110,
     width: "45%",
   },
   container: {

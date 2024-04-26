@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white", // Ensures the text color is white
-    fontSize: 15, // You can adjust the size as needed
+    fontSize: 12.5, // You can adjust the size as needed
   },
   backgroundImage: {
     flex: 1,
